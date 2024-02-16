@@ -1,6 +1,6 @@
 from datetime import datetime
 
-saldo = 100
+saldo = 0
 extrato = []
 num_saque = 0
 
@@ -24,7 +24,7 @@ menu = """
 
 
 #Deposito - Não deixar depositar valores negativos - Constar todos os depositos em extrato
-#Deve receber os argumentos por posição: saldo, valor, extrato 
+
 def deposito(valor):
     global saldo,extrato
 
@@ -55,9 +55,9 @@ def deposito(valor):
               
 
 #saque - só pode no maximo 3 por dia - limite de 500 por saque - usuario com saldo negativo deve ser informado - todos os saques deve ser exibidos em extrato
-#Refator o codigo para a função saque receber os seguintes argumentos POR NOME: saldo, valor, extrato, limite, numero_saques, limite_saques
-def saque(valor="none",num_saque="none",saldo=saldo,extrato="none"):
-    
+
+def saque(valor):
+    global num_saque,saldo,extrato
 
     if num_saque == 3:
         return print("Numero de saque excedido")
@@ -75,8 +75,10 @@ def saque(valor="none",num_saque="none",saldo=saldo,extrato="none"):
 
 
 #Extrato - listar todos os depositos e saques da conta - exibir no final o saldo da conta - valores deve ser exibido no seguinte formato(R$ 1.500,00)
-   #Deve receber os argumentos por posição e por nome, Posicional: saldo - Nomeados: extrato  
-def funcao_extrato(extrato,/,saldo):
+    
+def funcao_extrato():
+    global extrato,saldo
+
     for extr in extrato:
         print(f"{extr}") 
     print(f"Saldo em conta: {saldo:.2f}")
@@ -92,83 +94,53 @@ def periodo():
 
 
 
-
-
-
-
-
-#Criar função: Criar usuario
-
-# O programa deve armazenar os usuários em uma lista, um usuário é composto por: nome, data de nascimento, cpf e endereço.
-# O endereço é uma string com o formato: logradouro, nro - bairro - cidade/sigla estado. Deve ser armazenado somente os números do CPF.
-# Não podemos cadastrar 2 usuários com o mesmo CPF.
-
-
-
-
-
-
-
-#criar função: Criar conta corrente
-
-
-# O programa deve armazenar contas em uma lista, uma conta é composta por: agência, número da conta e usuário. O número da conta é sequencial, iniciando em 1. 
-# O número da agência é fixo: 0001.
-# O usuário pode ter mais de uma conta, mas uma conta pertence a somente um usuário.
-
-
-# Para vincular um usuário a uma conta, filtre a lista de usuários buscando o número do CPF informado para cada usuário da lista.
-
-
-
-
 #loop Menu
-def main():
-    while True:
-        
-        escolha = input(menu)
 
-        try:
-            if escolha.upper() == "S" :
+while True:
+    
+    escolha = input(menu)
 
+    try:
+        if escolha.upper() == "S" :
+
+            while True:
+                vl_saque = input("Digite um valor para saque (Obs: O valor para saque é no maximo R$ 500,00.): ")
                 while True:
-                    vl_saque = input("Digite um valor para saque (Obs: O valor para saque é no maximo R$ 500,00.): ")
-                    while True:
-                        try:
-                            valor = float(vl_saque)
-                            if valor < 0:
-                                vl_saque = input("Por favor, insira um valor numérico válido ou [S] para sair.")          
-                                if vl_saque.upper() == "S":
-                                    print("Volte sempre!")
-                                    break
-                                continue
-                            saque(valor=valor,num_saque=num_saque,saldo=saldo,extrato=extrato)
-                            break
-                        except ValueError:
+                    try:
+                        valor = float(vl_saque)
+                        if valor < 0:
                             vl_saque = input("Por favor, insira um valor numérico válido ou [S] para sair.")          
                             if vl_saque.upper() == "S":
                                 print("Volte sempre!")
                                 break
-                    break               
+                            continue
+                        saque(valor)
+                        break
+                    except ValueError:
+                        vl_saque = input("Por favor, insira um valor numérico válido ou [S] para sair.")          
+                        if vl_saque.upper() == "S":
+                            print("Volte sempre!")
+                            break
+                break               
 
-            elif escolha.upper() == "D" :
-                
-                vl_deposito = input("Digite a quantia que deseja depositar.): ")
-                deposito(vl_deposito)    
-        
-            elif escolha.upper() == "E" :
-                funcao_extrato(extrato, saldo=saldo)
-                break
+        elif escolha.upper() == "D" :
             
-            elif escolha.upper() == "Q" :
-                break
-        except ValueError:
-            vl_saque = input("Por favor, insira um parâmetro válido ou [Q] para sair.")          
-            if vl_saque.upper() == "Q":
-                break      
+            vl_deposito = input("Digite a quantia que deseja depositar.): ")
+            deposito(vl_deposito)    
+     
+        elif escolha.upper() == "E" :
+            funcao_extrato()
+            break
+        
+        elif escolha.upper() == "Q" :
+            break
+    except ValueError:
+        vl_saque = input("Por favor, insira um parâmetro válido ou [Q] para sair.")          
+        if vl_saque.upper() == "Q":
+            break      
 
 
-main()
+
 
 
 
